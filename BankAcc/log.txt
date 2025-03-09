@@ -1,1 +1,5 @@
-Date: [9.3.2025]  Time: [11:24:15] -- Transaction type: [Top up]  Transaction value: [35] -- Balance: [535]
+Date: [9.3.2025]  Time: [13:1:8] -- Transaction type: [Top up]  Transaction value: [1001] -- Balance: [1001]
+Date: [9.3.2025]  Time: [13:1:12] -- Transaction type: [Withdraw]  Transaction value: [101] -- Balance: [900]
+Date: [9.3.2025]  Time: [13:1:53] -- Transaction type: [Top up]  Transaction value: [5000] -- Balance: [5900]
+Date: [9.3.2025]  Time: [13:8:27] -- Transaction type: [Top up]  Transaction value: [1200] -- Balance: [1200]
+Date: [9.3.2025]  Time: [13:8:31] -- Transaction type: [Withdraw]  Transaction value: [11] -- Balance: [1189]

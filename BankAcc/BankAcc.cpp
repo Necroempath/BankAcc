@@ -48,14 +48,14 @@ class Customer
 public:
 	Customer() : _name("Unknown"), _surname("Unknown") {}
 
-	Customer(size_t balance, char* name, char* surname)
+	Customer(int balance, char* name, char* surname)
 	{
 		_account.TopUp(balance);
 		strncpy(_name, name, sizeof(_name));
 		strncpy(_surname, surname, sizeof(_surname));
 	}
 
-	explicit Customer(size_t balance, char* name) : _surname("Unknown")
+	explicit Customer(int balance, char* name) : _surname("Unknown")
 	{
 		_account.TopUp(balance);
 		strncpy(_name, name, sizeof(_name));
@@ -67,7 +67,7 @@ public:
 		strncpy(_surname, customer._surname, sizeof(_surname));
 	}
 
-	bool TopUp(const size_t amount) 
+	bool TopUp(const int amount) 
 	{ 
 		if (amount > 0)
 		{
@@ -79,7 +79,7 @@ public:
 		return 0;
 	}
 
-	bool Withdraw(const size_t amount)
+	bool Withdraw(const int amount)
 	{
 		if (FundsCheck(amount))
 		{
@@ -106,11 +106,11 @@ public:
 		return fullname;
 	}
 
-	void ChangeName(char* name) { strncpy(_name, name, sizeof(_name)); }
+	void ChangeName(char* name) { strncpy(_name, name, sizeof(_name)); std::cout << _name; }
 
 	void ChangeSurname(char* surname) { strncpy(_surname, surname, sizeof(_surname)); }
 
-	bool FundsTransfer(BankAccount account, size_t amount) 
+	bool FundsTransfer(BankAccount account, int amount) 
 	{ 
 		if (account.GetBalance() >= amount) 
 		{
@@ -136,14 +136,15 @@ void PrintMenu()
 	std::cout << "\n1. New customer";
 	std::cout << "\n2. Top up balance";
 	std::cout << "\n3. Withdraw from account";
-	std::cout << "\n4. Display info";
-	std::cout << "\n5. Exit\n";
+	std::cout << "\n4. Transfer funds";
+	std::cout << "\n5. Display info";
+	std::cout << "\n6. Exit\n";
 }
 
 Customer CreateCustomer()
 {
 	char name[20], surname[20];
-	size_t balance;
+	int balance;
 	bool validName = false, validSurname = false, validBalance = false;
 
 	std::cout << "\nEnter name*:\t";
@@ -164,6 +165,8 @@ Customer CreateCustomer()
 
 	if (validName && validBalance) {
 
+		std::cout << "\nCustomer successfully created\n";
+
 		if (validSurname) {
 
 			Customer customer(balance, name, surname);
@@ -174,7 +177,50 @@ Customer CreateCustomer()
 		return customer;
 	}
 
-	std::cout << "Error: Invalid name and/or balance data!";
+	std::cout << "\nError: Invalid name and/or balance data!\n";
+}
+
+void ProfileEdit(Customer customer)
+{
+	std::cout << "\n1. Change name";
+	std::cout << "\n2. Change surname";
+	std::cout << "\n3. Return\n";
+
+	short option;
+	std::cin >> option;
+	std::cin.ignore();
+
+	switch(option)
+	{
+		case 1:
+			char name[20];
+			std::cout << "\nEnter name:\t";
+			std::cin >> name;
+
+			if (strlen(name) < 3) {
+				std::cout << "\nError: Name length must be more than 3 chars!";
+				break;
+			}
+
+			customer.ChangeName(name);
+			break;
+
+		case 2:
+			char surname[20];
+			std::cout << "\nEnter surname:\t";
+			std::cin >> surname;
+
+			if (strlen(surname) < 3) {
+				std::cout << "\nError: Surname length must be more than 3 chars!";
+				break;
+			}
+
+			customer.ChangeSurname(surname);
+			break;
+
+		default:
+			break;
+	}
 }
 
 int main()
@@ -197,50 +243,54 @@ int main()
 			break;
 
 		case 2:
-
-			size_t amount;
+			int amount_topUp;
 			std::cout << "Enter amount:\t";
-			std::cin >> amount;
+			std::cin >> amount_topUp;
 
-			if (amount <= 0) {
+			if (amount_topUp <= 0) {
 				std::cout << "\nError: Invalid amount data. Amount most be posotive integer!\n";
 				break;
 			}
 
-			if (customer.TopUp(amount)) std::cout << "\nTransaction successfully completed\n";
+			if (customer.TopUp(amount_topUp)) std::cout << "\nTransaction successfully completed\n";
 			break;
 
 		case 3:
-
-			size_t amount;
+			int amount_withdraw;
 			std::cout << "Enter amount:\t";
-			std::cin >> amount;
+			std::cin >> amount_withdraw;
 
-			if (amount <= 0) {
+			if (amount_withdraw <= 0) {
 				std::cout << "\nError: Invalid amount data. Amount most be posotive integer!\n";
 				break;
 			}
 
-		case 4:
-			customer.DisplayInfo();
+			if (customer.Withdraw(amount_withdraw)) std::cout << "\nTransaction successfully completed\n";
+			else std::cout << "\nError: Insufficient funds in account\n";
 			break;
+
+		case 4:
+			//BankAccount acc(100);
+
+			//int amount_trans;
+			//std::cout << "Enter amount:\t";
+			//std::cin >> amount_trans;
+
+			//customer.FundsTransfer(acc, amount_trans);
+
 		case 5:
+			customer.DisplayInfo();
+			ProfileEdit(customer);
+			break;
+
+		case 6:
 			exit = true;
+			break;
 		default:
 			std::cout << "\nError: Invalid menu option input.\n";
 		}
 	}
 	
-
-	char name[20] = "John";
-	char surname[20] = "Strong";
-	char sur[20] = "Weak";
-	char nam[20] = "Clown";
-	Customer customer(500, name, surname);
-
-	customer.TopUp(35);
-
-
 	return 0;
 }
 

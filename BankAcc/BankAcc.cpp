@@ -136,49 +136,102 @@ void PrintMenu()
 	std::cout << "\n1. New customer";
 	std::cout << "\n2. Top up balance";
 	std::cout << "\n3. Withdraw from account";
-	std::cout << "\n4. Display info\n";
+	std::cout << "\n4. Display info";
+	std::cout << "\n5. Exit\n";
 }
 
 Customer CreateCustomer()
 {
+	char name[20], surname[20];
+	size_t balance;
+	bool validName = false, validSurname = false, validBalance = false;
 
-}
+	std::cout << "\nEnter name*:\t";
+	std::cin >> name;
 
-size_t GetAmount()
-{
-	size_t amount;
+	if (strlen(name) > 2) validName = true;
 
-	std::cin >> amount;
-	std::cin.ignore();
+	std::cout << "\nEnter surname (optional):\t";
+	std::cin >> surname;
 
-	return amount;
+	if (strlen(surname) > 2) validSurname = true;
+
+
+	std::cout << "\nEnter balance*:\t";
+	std::cin >> balance;
+
+	if (balance >= 0) validBalance = true;
+
+	if (validName && validBalance) {
+
+		if (validSurname) {
+
+			Customer customer(balance, name, surname);
+			return customer;
+		}
+
+		Customer customer(balance, name);
+		return customer;
+	}
+
+	std::cout << "Error: Invalid name and/or balance data!";
 }
 
 int main()
 {
 	Customer customer;
+	bool exit = false;
 
-	PrintMenu();
-
-	short option;
-	std::cin >> option;
-	std::cin.ignore();
-
-	switch (option)
+	while (!exit) 
 	{
-	case 1:
-		CreateCustomer();
-		break;
-	case 2:
-		std::cout << "Enter sum:\t";
-		if (customer.TopUp(GetAmount())) std::cout << "\nTransaction successfully completed\n";
-	default:
-		std::cout << "Enter sum:\t";
-		if (customer.Withdraw(GetAmount())) 
-			std::cout << "\nTransaction successfully completed\n";
-		else
-		break;
+		PrintMenu();
+
+		short option;
+		std::cin >> option;
+		std::cin.ignore();
+
+		switch (option)
+		{
+		case 1:
+			CreateCustomer();
+			break;
+
+		case 2:
+
+			size_t amount;
+			std::cout << "Enter amount:\t";
+			std::cin >> amount;
+
+			if (amount <= 0) {
+				std::cout << "\nError: Invalid amount data. Amount most be posotive integer!\n";
+				break;
+			}
+
+			if (customer.TopUp(amount)) std::cout << "\nTransaction successfully completed\n";
+			break;
+
+		case 3:
+
+			size_t amount;
+			std::cout << "Enter amount:\t";
+			std::cin >> amount;
+
+			if (amount <= 0) {
+				std::cout << "\nError: Invalid amount data. Amount most be posotive integer!\n";
+				break;
+			}
+
+		case 4:
+			customer.DisplayInfo();
+			break;
+		case 5:
+			exit = true;
+		default:
+			std::cout << "\nError: Invalid menu option input.\n";
+		}
 	}
+	
+
 	char name[20] = "John";
 	char surname[20] = "Strong";
 	char sur[20] = "Weak";

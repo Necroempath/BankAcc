@@ -162,8 +162,6 @@ void ProfileEdit(Customer& customer)
 	}
 }
 
-//2 questions
-
 int main()
 {
 	Customer customer;

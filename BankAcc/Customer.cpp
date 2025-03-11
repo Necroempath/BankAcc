@@ -7,14 +7,14 @@ Customer::Customer() : _name("Unknown"), _surname("Unknown") {}
 
 Customer::Customer(int balance, char* name, char* surname)
 {
-	_account.TopUp(balance);
+	_account = BankAccount(balance);
 	strncpy(_name, name, sizeof(_name));
 	strncpy(_surname, surname, sizeof(_surname));
 }
 
 Customer::Customer(int balance, char* name) : _surname("Unknown")
 {
-	_account.TopUp(balance);
+	_account = BankAccount(balance);
 	strncpy(_name, name, sizeof(_name));
 }
 
@@ -36,8 +36,7 @@ Customer& Customer::operator=(Customer& other)
 {
 	if (&other == this) return *this;
 
-	Withdraw(GetBalance());
-	TopUp(other.GetBalance());
+	_account = other._account;
 	ChangeName(other._name);
 	ChangeSurname(other._surname);
 
@@ -48,13 +47,13 @@ Customer& Customer::operator=(Customer&& other) noexcept
 {
 	if (&other == this) return *this;
 
-	Withdraw(GetBalance());
-	other.FundsTransfer(_account, other.GetBalance());
+	_account = other._account;
 	ChangeName(other._name);
 	ChangeSurname(other._surname);
 
 	strncpy(other._name, "Unknown", sizeof(_name));
 	strncpy(other._surname, "Unknown", sizeof(_surname));
+	other._account = BankAccount(0);
 
 	return *this;
 }

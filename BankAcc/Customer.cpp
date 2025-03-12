@@ -97,9 +97,9 @@ char* Customer::GetFullname() const
 	return fullname;
 }
 
-void Customer::ChangeName(char* name) { strncpy(_name, name, sizeof(_name)); }
+void Customer::ChangeName(const char* name) { strncpy(_name, name, sizeof(_name)); }
 
-void Customer::ChangeSurname(char* surname) { strncpy(_surname, surname, sizeof(_surname)); }
+void Customer::ChangeSurname(const char* surname) { strncpy(_surname, surname, sizeof(_surname)); }
 
 int Customer::FundsTransfer(BankAccount& account, int amount)
 {

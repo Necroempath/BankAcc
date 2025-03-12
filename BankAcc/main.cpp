@@ -76,88 +76,66 @@ void PrintMenu()
 	std::cout << "\n7. Exit\n";
 }
 
-Customer CreateCustomer() //Is there too many actions in this function
+void FillCustomer(char* name, char* surname, int& balance)
 {
-	char name[20], surname[20];
-	int balance;
-	bool validName = false, validSurname = false, validBalance = false;
-
 	std::cout << "\nEnter name*:\t";
 	std::cin >> name;
-
-	if (strlen(name) > 2) validName = true;
 
 	std::cout << "\nEnter surname (optional):\t";
 	std::cin >> surname;
 
-	if (strlen(surname) > 2) validSurname = true;
-
-
 	std::cout << "\nEnter balance*:\t";
 	std::cin >> balance;
-
-	if (balance >= 0) validBalance = true;
-
-	if (validName && validBalance) {
-
-		std::cout << "\nCustomer successfully created\n";
-
-		if (validSurname) {
-
-			Customer customer(balance, name, surname);
-			return customer;
-		}
-
-		Customer customer(balance, name);
-		return customer;
-	}
-
-	std::cout << "\nError: Invalid name and/or balance data!\n";
-
-	return Customer();
 }
 
-void ProfileEdit(Customer& customer)
+void FillName(const unsigned short option, char* name, char* surname)
+{
+	switch (option)
+	{
+	case 1:
+		std::cout << "\nEnter new name:\t";
+		std::cin >> name;
+		break;
+	case 2:
+		std::cout << "\nEnter new surname:\t";
+		std::cin >> surname;
+		break;
+	}
+}
+
+bool isValidName(char* name)
+{
+	return strlen(name) > 2;
+}
+
+int ValidFields(const char* name, const char* surname, const int balance)
+{
+	if (strlen(name) > 2 && balance >= 0)
+	{
+		if (strlen(surname) > 2) return 0;
+		else return 1;
+	}
+
+	return -1;
+}
+
+void PrintEditMenu()
 {
 	std::cout << "\n1. Change name";
 	std::cout << "\n2. Change surname";
 	std::cout << "\n3. Return\n";
+}
 
-	short option;
-	std::cin >> option;
-	std::cin.ignore();
-
+void ProfileEdit(Customer& customer, const unsigned short option, const char* name, char* surname)
+{
 	switch (option)
 	{
 	case 1:
-		char name[20];
-		std::cout << "\nEnter name:\t";
-		std::cin >> name;
-
-		if (strlen(name) < 3) {
-			std::cout << "\nError: Name length must be more than 3 chars!";
-			break;
-		}
-
 		customer.ChangeName(name);
-		std::cout << "\nSuccess: Name has been changed\n";
 		break;
 
 	case 2:
-		char surname[20];
-		std::cout << "\nEnter surname:\t";
-		std::cin >> surname;
-
-		if (strlen(surname) < 3) {
-			std::cout << "\nError: Surname length must be more than 3 chars!";
-			break;
-		}
-
 		customer.ChangeSurname(surname);
-		std::cout << "\nSuccess: Surname has been changed\n";
-		break;
-
-	default:
 		break;
 	}
 }
@@ -165,9 +143,10 @@ void ProfileEdit(Customer& customer)
 int main()
 {
 	Customer customer;
-	BankAccount undefinedAcc; //for transfer purposes
+	BankAccount undefinedAcc;
 	char* log;
 	bool exit = false;
+	int valid_fileds;
 
 	while (!exit)
 	{
@@ -180,7 +159,23 @@ int main()
 		switch (option)
 		{
 		case 1:
-			customer = CreateCustomer();
+			char name[20];
+			char surname[20];
+			int balance;
+
+			FillCustomer(name, surname, balance);
+
+			valid_fileds = ValidFields(name, surname, balance);
+			if (valid_fileds >= 0)
+			{
+				if (valid_fileds > 0) customer = Customer(balance, name);
+				else customer = Customer(balance, name, surname);
+
+				std::cout << "\nSuccess: New customer created!\n";
+				break;
+			}
+
+			std::cout << "\Error: Invalid 'balance' and/or 'name' data!\n";
 			break;
 
 		case 2:
@@ -237,7 +232,25 @@ int main()
 
 		case 5:
 			customer.DisplayInfo();
-			ProfileEdit(customer);
+			PrintEditMenu();
+
+			unsigned short option;
+			std::cin >> option;
+
+			if (option >= 3) break;
+
+			char _name[20];
+			char _surname[20];
+
+			FillName(option, name, surname);
+
+			if (isValidName(option == 1 ? name : surname)) {
+				std::cout << "\nSuccess: " << (option == 1 ? "Name" : "Surname") << " has been changed\n";
+				ProfileEdit(customer, option, name, surname);
+				break;
+			}
+
+			std::cout << "\nError: Invalid " << (option == 1 ? " Name" : "Surname") << " data\n";
 			break;
 
 		case 6:

@@ -3,3 +3,4 @@ Date: [11.3.2025]  Time: [23:11:8] -- Transaction type: [Withdraw]  Transaction 
 Date: [11.3.2025]  Time: [23:11:10] -- Transaction type: [Transfer]  Transaction value: [400] -- Balance: [150]
 Date: [11.3.2025]  Time: [23:11:12] -- Transaction type: [Transfer]  Transaction value: [4] -- Balance: [146]
 Date: [11.3.2025]  Time: [23:11:22] -- Transaction type: [Withdraw]  Transaction value: [120] -- Balance: [26]
+Date: [12.3.2025]  Time: [18:44:6] -- Transaction type: [Top_Up]  Transaction value: [100] -- Balance: [1100]

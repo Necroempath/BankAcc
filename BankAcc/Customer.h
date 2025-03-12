@@ -33,9 +33,9 @@ public:
 
 	char* GetFullname() const;
 
-	void ChangeName(char* name);
+	void ChangeName(const char* name);
 
-	void ChangeSurname(char* surname);
+	void ChangeSurname(const char* surname);
 
 	int FundsTransfer(BankAccount& account, int amount);
 
